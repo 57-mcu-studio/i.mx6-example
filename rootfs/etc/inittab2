@@ -1,0 +1,17 @@
+::sysinit:/bin/echo '\000\000\000\000' > /proc/sys/kernel/hotplug
+::sysinit:/bin/hostname imx6
+::sysinit:/bin/mkdir -p /dev/pts
+::sysinit:/bin/mount devpts /dev/pts -t devpts
+
+::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+::sysinit:/sbin/ifconfig eth0 up
+
+# now run any rc scripts
+::sysinit:/etc/init.d/rcS
+
+# Stuff to do before rebooting
+::shutdown:/bin/umount -a -r
+
+# Put a getty on the serial port 0
+::respawn:/sbin/getty -L ttymxc0 115200 vt100

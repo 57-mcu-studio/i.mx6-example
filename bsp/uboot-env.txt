@@ -1,0 +1,34 @@
+baudrate=115200
+boot_fdt=try
+bootcmd=mmc dev ${mmcdev}; if mmc rescan; then if run loadbootenv; then echo Loaded environment from ${bootenv};run importbootenv;fi;if test -n $uenvcmd; then echo Running uenvcmd ...;run uenvcmd;fi;if run loadbootscript; then run bootsci
+bootdelay=1
+bootdev=SD1
+bootdev_autodetect=on
+bootenv=uEnv.txt
+bootscript=echo Running bootscript from mmc ...; source
+console=ttymxc0
+display_autodetect=on
+ethact=FEC
+ethaddr=00:1f:7b:54:06:2e
+ethprime=FEC
+fdt_addr=0x18000000
+fdt_high=0xffffffff
+fdtfile=imx6q-edm1-cf.dtb
+fdtfile_autodetect=on
+image=zImage
+importbootenv=echo Importing environment from mmc ...; env import -t -r $loadaddr $filesize
+initrd_high=0xffffffff
+loadaddr=0x12000000
+loadbootenv=fatload mmc ${mmcdev} ${loadaddr} ${bootenv}
+loadbootscript=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};
+loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdtfile}
+loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}
+mmcargs=setenv bootargs console=${console},${baudrate} root=${mmcroot}; run videoargs
+mmcboot=echo Booting from mmc ...; run searchbootdev; run mmcargs; if test ${boot_fdt} = yes || test ${boot_fdt} = try; then if run loadfdt; then bootz ${loadaddr} - ${fdt_addr}; else if test ${boot_fdt} = try; then bootz; else echo WARN;
+mmcdev=0
+mmcpart=1
+script=boot.scr
+searchbootdev=if test ${bootdev} = SD0; then setenv mmcroot /dev/mmcblk2p2 rootwait rw; else setenv mmcroot /dev/mmcblk0p2 rootwait rw; fi
+splashpos=m,m
+videoargs=if test ${display_autodetect} = off; then echo Applying custom display setting...;setenv bootargs ${bootargs} ${displayinfo} ${fbmem};else echo Detecting monitor...;setenv nextcon 0; i2c dev 1; if i2c probe 0x10; then setenv bo;
+

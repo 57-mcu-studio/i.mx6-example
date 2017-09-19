@@ -1,0 +1,13 @@
+::sysinit:/bin/mount -t proc proc /proc
+::sysinit:/bin/mount -t sysfs sysfs /sys
+
+# mount aufs
+::sysinit:/bin/mount -t tmpfs tmpfs /aufs
+::sysinit:/bin/mkdir -p /aufs/root
+::sysinit:/bin/mkdir -p /aufs/rw
+::sysinit:/bin/mount -t aufs -n -o "br:/aufs/rw:/,trunc_xino" none "/aufs/root"
+::sysinit:/bin/mv /aufs/root/etc/inittab2 /aufs/root/etc/inittab
+::sysinit:/bin/mount -o move /dev /aufs/root/dev
+::sysinit:/bin/mount -o move /proc /aufs/root/proc
+::sysinit:/bin/mount -o move /sys /aufs/root/sys
+::sysinit:/usr/sbin/chroot /aufs/root /linuxrc

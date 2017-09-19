@@ -1,0 +1,4 @@
+rootfs_addr=0x20000000
+set_bootargs=setenv bootargs console=${console},${baudrate} initrd=${rootfs_addr},8M root=/dev/ram0 rootfstype=squashfs ro
+loadrootfs=fatload mmc ${mmcdev}:${mmcpart} ${rootfs_addr} rootfs.squashfs
+uenvcmd=run set_bootargs;run loadfdt;run loadimage;run loadrootfs;bootz ${loadaddr} - ${fdt_addr}
